@@ -7,12 +7,21 @@
 //
 
 #import "AppDelegate.h"
+#import "LoginViewController.h"
 
 @implementation AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     // Insert code here to initialize your application
+    
 }
 
+- (void)awakeFromNib
+{
+    LoginViewController *loginVC = [[LoginViewController alloc] init];
+    [self.window setContentView:loginVC.view];
+    
+    
+}
 @end
