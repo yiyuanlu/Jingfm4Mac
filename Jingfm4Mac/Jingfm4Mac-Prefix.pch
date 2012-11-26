@@ -2,6 +2,18 @@
 // Prefix header for all source files of the 'Jingfm4Mac' target in the 'Jingfm4Mac' project
 //
 
+#define SERVER_DOMAIN       @"http://jing.fm"
+#define API1_PATH           @"/api/v1"
+#define API1_URL            [NSString stringWithFormat:@"%@%@",SERVER_DOMAIN,API1_PATH]
+
+#define SESSION_CREATE      @"/sessions/create"
+#define FETCH_PLS           @"/search/jing/fetch_pls"
+#define FETCH_TRACKS        @"/music/fetch_track_infos"
+#define SONG_URL            @"/media/song/surl"
+
 #ifdef __OBJC__
     #import <Cocoa/Cocoa.h>
+    #import <RestKit/RestKit.h>
+    #import "GlobalData.h"
 #endif
+

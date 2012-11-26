@@ -9,5 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 @interface LoginViewController : NSViewController
-
+@property (nonatomic,strong) IBOutlet NSTextField *email;
+@property (nonatomic,strong) IBOutlet NSTextField *pass;
+@property (nonatomic,strong) IBOutlet NSButton *btnLogin;
 @end

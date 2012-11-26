@@ -15,7 +15,23 @@
 		2C8618601657909E00755A47 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C86185E1657909E00755A47 /* MainMenu.xib */; };
 		2C861869165797AD00755A47 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C861867165797AD00755A47 /* LoginViewController.m */; };
 		2C86186A165797AD00755A47 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C861868165797AD00755A47 /* LoginViewController.xib */; };
+		2CD62CFB16635EC400BDBE90 /* GlobalData.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CD62CFA16635EC400BDBE90 /* GlobalData.m */; };
+		2CD62D0216637A2600BDBE90 /* RestKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2CD62D001663799300BDBE90 /* RestKit.framework */; };
+		2CD62D0316637A4200BDBE90 /* RestKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CD62D001663799300BDBE90 /* RestKit.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2CD62CFF1663796100BDBE90 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				2CD62D0216637A2600BDBE90 /* RestKit.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		2C8618451657909D00755A47 /* Jingfm4Mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Jingfm4Mac.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -34,6 +50,9 @@
 		2C861866165797AD00755A47 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginViewController.h; path = ViewController/LoginViewController.h; sourceTree = "<group>"; };
 		2C861867165797AD00755A47 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = ViewController/LoginViewController.m; sourceTree = "<group>"; };
 		2C861868165797AD00755A47 /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LoginViewController.xib; path = ViewController/LoginViewController.xib; sourceTree = "<group>"; };
+		2CD62CF916635EC400BDBE90 /* GlobalData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GlobalData.h; path = Common/GlobalData.h; sourceTree = "<group>"; };
+		2CD62CFA16635EC400BDBE90 /* GlobalData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GlobalData.m; path = Common/GlobalData.m; sourceTree = "<group>"; };
+		2CD62D001663799300BDBE90 /* RestKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RestKit.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +61,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2C86184A1657909D00755A47 /* Cocoa.framework in Frameworks */,
+				2CD62D0316637A4200BDBE90 /* RestKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -68,6 +88,7 @@
 		2C8618481657909D00755A47 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2CD62D001663799300BDBE90 /* RestKit.framework */,
 				2C8618491657909D00755A47 /* Cocoa.framework */,
 				2C86184B1657909D00755A47 /* Other Frameworks */,
 			);
@@ -87,6 +108,7 @@
 		2C86184F1657909D00755A47 /* Jingfm4Mac */ = {
 			isa = PBXGroup;
 			children = (
+				2CD62CF816635EA000BDBE90 /* Common */,
 				2C86186B165797B800755A47 /* ViewController */,
 				2C86185B1657909E00755A47 /* AppDelegate.h */,
 				2C86185C1657909E00755A47 /* AppDelegate.m */,
@@ -118,6 +140,15 @@
 			name = ViewController;
 			sourceTree = "<group>";
 		};
+		2CD62CF816635EA000BDBE90 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				2CD62CF916635EC400BDBE90 /* GlobalData.h */,
+				2CD62CFA16635EC400BDBE90 /* GlobalData.m */,
+			);
+			name = Common;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -128,6 +159,7 @@
 				2C8618411657909D00755A47 /* Sources */,
 				2C8618421657909D00755A47 /* Frameworks */,
 				2C8618431657909D00755A47 /* Resources */,
+				2CD62CFF1663796100BDBE90 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -186,6 +218,7 @@
 				2C8618561657909E00755A47 /* main.m in Sources */,
 				2C86185D1657909E00755A47 /* AppDelegate.m in Sources */,
 				2C861869165797AD00755A47 /* LoginViewController.m in Sources */,
+				2CD62CFB16635EC400BDBE90 /* GlobalData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,6 +309,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Jingfm4Mac/Jingfm4Mac-Prefix.pch";
 				INFOPLIST_FILE = "Jingfm4Mac/Jingfm4Mac-Info.plist";
@@ -288,6 +325,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Jingfm4Mac/Jingfm4Mac-Prefix.pch";
 				INFOPLIST_FILE = "Jingfm4Mac/Jingfm4Mac-Info.plist";
@@ -315,6 +356,7 @@
 				2C8618651657909E00755A47 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
