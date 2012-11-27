@@ -11,6 +11,12 @@
 #define FETCH_TRACKS        @"/music/fetch_track_infos"
 #define SONG_URL            @"/media/song/surl"
 
+#define JING_HEAD_A_KEY     @"Jing-A-Token-Header"
+#define JING_HEAD_R_KEY     @"Jing-R-Token-Header"
+
+#define SAFE_STR(Object)    (Object==nil?@"":Object)
+#define STR_FROM_BOOL(b)    (b==YES?@"YES":@"NO")
+
 #ifdef __OBJC__
     #import <Cocoa/Cocoa.h>
     #import <RestKit/RestKit.h>

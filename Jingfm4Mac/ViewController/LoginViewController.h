@@ -12,4 +12,5 @@
 @property (nonatomic,strong) IBOutlet NSTextField *email;
 @property (nonatomic,strong) IBOutlet NSTextField *pass;
 @property (nonatomic,strong) IBOutlet NSButton *btnLogin;
+-(IBAction)actLogin:(id)sender;
 @end
