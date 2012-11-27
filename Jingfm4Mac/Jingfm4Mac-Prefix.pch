@@ -21,5 +21,8 @@
     #import <Cocoa/Cocoa.h>
     #import <RestKit/RestKit.h>
     #import "GlobalData.h"
+    #import "AppDelegate.h"
 #endif
 
+
+#define APP_DELEGATE (AppDelegate *)([NSApplication sharedApplication].delegate)

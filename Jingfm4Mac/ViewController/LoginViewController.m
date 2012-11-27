@@ -55,17 +55,17 @@
                 NSDictionary *resDic = [response parsedBody:&error];
                 BOOL success = [[resDic objectForKey:@"success"] boolValue];
                 NSString *msg = SAFE_STR([resDic objectForKey:@"msg"]);
-                NSLog(@"%@",msg);            
+                NSLog(@"%@",msg);
                 //Check Response Body to get Data!
                 if(!error&&resDic&&success)
                 {
-                    NSLog(@"resDic [%@]",resDic);
+                    //NSLog(@"resDic [%@]",resDic);
                     NSDictionary *result = [resDic objectForKey:@"result"];
                     NSDictionary *pld = [result objectForKey:@"pld"];
                     [GlobalData sharedInstance].LastMid = SAFE_STR([pld objectForKey:@"mid"]);
                     [GlobalData sharedInstance].Cmbt = SAFE_STR([pld objectForKey:@"cmbt"]);
                     [GlobalData sharedInstance].Uid = SAFE_STR([pld objectForKey:@"uid"]);
-                    
+                    [APP_DELEGATE changeViewState:EView_Playing];
                 }
                 else
                 {
