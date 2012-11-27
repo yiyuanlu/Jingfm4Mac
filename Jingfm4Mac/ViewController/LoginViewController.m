@@ -26,8 +26,8 @@
 -(IBAction)actLogin:(id)sender
 {
     RKParams *params = [[RKParams alloc] init];
-    [params setValue:self.email.value forParam:@"email"];
-    [params setValue:self.pass.value forParam:@"pwd"];
+    [params setValue:self.email.stringValue forParam:@"email"];
+    [params setValue:self.pass.stringValue forParam:@"pwd"];
     
     [[RKClient sharedClient] get:SESSION_CREATE usingBlock:^(RKRequest *request) {
         request.params = params;
@@ -53,14 +53,23 @@
             {
                 NSError *error = nil;
                 NSDictionary *resDic = [response parsedBody:&error];
+                BOOL success = [[resDic objectForKey:@"success"] boolValue];
+                NSString *msg = SAFE_STR([resDic objectForKey:@"msg"]);
+                NSLog(@"%@",msg);            
                 //Check Response Body to get Data!
-                if(!error&&resDic)
+                if(!error&&resDic&&success)
                 {
                     NSLog(@"resDic [%@]",resDic);
+                    NSDictionary *result = [resDic objectForKey:@"result"];
+                    NSDictionary *pld = [result objectForKey:@"pld"];
+                    [GlobalData sharedInstance].LastMid = SAFE_STR([pld objectForKey:@"mid"]);
+                    [GlobalData sharedInstance].Cmbt = SAFE_STR([pld objectForKey:@"cmbt"]);
+                    [GlobalData sharedInstance].Uid = SAFE_STR([pld objectForKey:@"uid"]);
                     
                 }
                 else
                 {
+                    NSLog(@"%@",msg);
                     NSLog(@"200 error [%@]",[error description]);
     //                [DROP_WINDOW showTips:error.localizedDescription];
                 }

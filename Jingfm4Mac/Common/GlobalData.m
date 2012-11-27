@@ -19,8 +19,6 @@
 		static dispatch_once_t oncePredicate;
 		dispatch_once(&oncePredicate, ^{
 			_sharedInstance = [[super allocWithZone:nil] init];
-//            _sharedInstance.JingAToken = @"";
-//            _sharedInstance.JingRToken = @"";
             
             [RKClient setSharedClient:[[RKClient alloc] initWithBaseURLString:API1_URL]];
             [RKObjectManager setSharedManager:[RKObjectManager objectManagerWithBaseURLString:API1_URL]];

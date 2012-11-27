@@ -11,5 +11,8 @@
 @interface GlobalData : NSObject
 @property (nonatomic,strong) NSString *JingAToken;
 @property (nonatomic,strong) NSString *JingRToken;
+@property (nonatomic,strong) NSString *LastMid;
+@property (nonatomic,strong) NSString *Cmbt;
+@property (nonatomic,strong) NSString *Uid;
 + (GlobalData*) sharedInstance;
 @end

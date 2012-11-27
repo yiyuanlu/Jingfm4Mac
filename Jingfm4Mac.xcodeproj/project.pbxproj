@@ -68,6 +68,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2C2E020816648D870014C7AC /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		2C86183A1657909D00755A47 = {
 			isa = PBXGroup;
 			children = (
@@ -108,6 +115,7 @@
 		2C86184F1657909D00755A47 /* Jingfm4Mac */ = {
 			isa = PBXGroup;
 			children = (
+				2C2E020816648D870014C7AC /* Model */,
 				2CD62CF816635EA000BDBE90 /* Common */,
 				2C86186B165797B800755A47 /* ViewController */,
 				2C86185B1657909E00755A47 /* AppDelegate.h */,

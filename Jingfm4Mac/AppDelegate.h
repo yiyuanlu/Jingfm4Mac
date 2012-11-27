@@ -8,8 +8,11 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class LoginViewController;
+
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 
 @property (assign) IBOutlet NSWindow *window;
+@property (nonatomic,strong) LoginViewController *loginVC;
 
 @end

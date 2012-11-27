@@ -14,13 +14,15 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     // Insert code here to initialize your application
+    //
+    [GlobalData sharedInstance];
     
 }
 
 - (void)awakeFromNib
 {
-    LoginViewController *loginVC = [[LoginViewController alloc] init];
-    [self.window setContentView:loginVC.view];
+    self.loginVC = [[LoginViewController alloc] init];
+    [self.window setContentView:self.loginVC.view];
     
     
 }
