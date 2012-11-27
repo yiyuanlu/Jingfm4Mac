@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class AudioStreamer;
+
 @interface PlayingViewController : NSViewController
 
 @property (nonatomic,strong) IBOutlet NSImageView *diskImage;
@@ -17,4 +19,5 @@
 @property (nonatomic,strong) IBOutlet NSTextField *txfSearch;
 @property (nonatomic,strong) IBOutlet NSButton *btnLogout;
 @property (nonatomic,strong) IBOutlet NSTextField *txfName;
+@property (nonatomic,strong) AudioStreamer *streamer;
 @end

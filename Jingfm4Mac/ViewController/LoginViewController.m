@@ -66,6 +66,8 @@
                     [GlobalData sharedInstance].Cmbt = SAFE_STR([pld objectForKey:@"cmbt"]);
                     [GlobalData sharedInstance].Uid = SAFE_STR([pld objectForKey:@"uid"]);
                     [APP_DELEGATE changeViewState:EView_Playing];
+                
+                    
                 }
                 else
                 {

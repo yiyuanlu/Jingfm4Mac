@@ -14,5 +14,6 @@
 @property (nonatomic,strong) NSString *LastMid;
 @property (nonatomic,strong) NSString *Cmbt;
 @property (nonatomic,strong) NSString *Uid;
+@property (nonatomic,strong) NSString *curSongUrl;
 + (GlobalData*) sharedInstance;
 @end
