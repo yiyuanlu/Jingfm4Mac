@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C2E020D166492590014C7AC /* PlayingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2E020B166492590014C7AC /* PlayingViewController.m */; };
+		2C2E020E166492590014C7AC /* PlayingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C2E020C166492590014C7AC /* PlayingViewController.xib */; };
 		2C86184A1657909D00755A47 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C8618491657909D00755A47 /* Cocoa.framework */; };
 		2C8618541657909D00755A47 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2C8618521657909D00755A47 /* InfoPlist.strings */; };
 		2C8618561657909E00755A47 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C8618551657909E00755A47 /* main.m */; };
@@ -34,6 +36,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2C2E020A166492590014C7AC /* PlayingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayingViewController.h; path = ViewController/PlayingViewController.h; sourceTree = "<group>"; };
+		2C2E020B166492590014C7AC /* PlayingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayingViewController.m; path = ViewController/PlayingViewController.m; sourceTree = "<group>"; };
+		2C2E020C166492590014C7AC /* PlayingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PlayingViewController.xib; path = ViewController/PlayingViewController.xib; sourceTree = "<group>"; };
 		2C8618451657909D00755A47 /* Jingfm4Mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Jingfm4Mac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C8618491657909D00755A47 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		2C86184C1657909D00755A47 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -141,6 +146,9 @@
 		2C86186B165797B800755A47 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				2C2E020A166492590014C7AC /* PlayingViewController.h */,
+				2C2E020B166492590014C7AC /* PlayingViewController.m */,
+				2C2E020C166492590014C7AC /* PlayingViewController.xib */,
 				2C861866165797AD00755A47 /* LoginViewController.h */,
 				2C861867165797AD00755A47 /* LoginViewController.m */,
 				2C861868165797AD00755A47 /* LoginViewController.xib */,
@@ -213,6 +221,7 @@
 				2C86185A1657909E00755A47 /* Credits.rtf in Resources */,
 				2C8618601657909E00755A47 /* MainMenu.xib in Resources */,
 				2C86186A165797AD00755A47 /* LoginViewController.xib in Resources */,
+				2C2E020E166492590014C7AC /* PlayingViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,6 +236,7 @@
 				2C86185D1657909E00755A47 /* AppDelegate.m in Sources */,
 				2C861869165797AD00755A47 /* LoginViewController.m in Sources */,
 				2CD62CFB16635EC400BDBE90 /* GlobalData.m in Sources */,
+				2C2E020D166492590014C7AC /* PlayingViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
