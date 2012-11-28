@@ -55,7 +55,6 @@
                 NSDictionary *resDic = [response parsedBody:&error];
                 BOOL success = [[resDic objectForKey:@"success"] boolValue];
                 NSString *msg = SAFE_STR([resDic objectForKey:@"msg"]);
-                NSLog(@"%@",msg);
                 //Check Response Body to get Data!
                 if(!error&&resDic&&success)
                 {
@@ -66,8 +65,7 @@
                     [GlobalData sharedInstance].Cmbt = SAFE_STR([pld objectForKey:@"cmbt"]);
                     [GlobalData sharedInstance].Uid = SAFE_STR([pld objectForKey:@"uid"]);
                     [GlobalData sharedInstance].Fid = SAFE_STR([pld objectForKey:@"fid"]);
-                
-                NSLog(@"%@",[GlobalData sharedInstance].amCoverImgUrl);
+                    
                     [APP_DELEGATE changeViewState:EView_Playing];
                 
                     
