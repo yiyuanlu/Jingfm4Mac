@@ -65,6 +65,9 @@
                     [GlobalData sharedInstance].LastMid = SAFE_STR([pld objectForKey:@"mid"]);
                     [GlobalData sharedInstance].Cmbt = SAFE_STR([pld objectForKey:@"cmbt"]);
                     [GlobalData sharedInstance].Uid = SAFE_STR([pld objectForKey:@"uid"]);
+                    [GlobalData sharedInstance].Fid = SAFE_STR([pld objectForKey:@"fid"]);
+                
+                NSLog(@"%@",[GlobalData sharedInstance].amCoverImgUrl);
                     [APP_DELEGATE changeViewState:EView_Playing];
                 
                     

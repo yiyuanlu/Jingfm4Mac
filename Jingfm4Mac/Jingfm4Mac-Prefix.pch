@@ -3,6 +3,7 @@
 //
 
 #define SERVER_DOMAIN       @"http://jing.fm"
+#define IMAGE_DOMAIN       @"http://img.jing.fm"
 #define API1_PATH           @"/api/v1"
 #define API1_URL            [NSString stringWithFormat:@"%@%@",SERVER_DOMAIN,API1_PATH]
 

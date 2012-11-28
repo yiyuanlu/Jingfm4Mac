@@ -21,6 +21,11 @@
     if (self) {
         // Initialization code here.
         {
+        //set cover image
+        [self performSelectorInBackground:@selector(loadImageData) withObject:nil];
+        
+        
+        //get song url
         RKParams *params = [[RKParams alloc] init];
         [params setValue:[GlobalData sharedInstance].LastMid forParam:@"mid"];
         [params setValue:@"NO" forParam:@"type"];
@@ -86,6 +91,29 @@
     return self;
 }
 
+-(void)loadImageData
+{
+    NSURL *imageURL = [NSURL URLWithString:[GlobalData sharedInstance].amCoverImgUrl];
+    NSError *error = nil;
+    NSData *data = [NSData dataWithContentsOfURL:imageURL
+                                         options:0
+                                           error:&error];
+    
+    NSImage *imageFromBundle = [[NSImage alloc] initWithData:data];
+    
+    
+    if (imageFromBundle&&data)
+    {
+        // The image loaded properly, so lets display it.
+        self.diskImage.image = imageFromBundle;
+    }
+    else
+    {
+        NSLog(@"imageView could not be loaded.");
+    }
+}
+
+
 - (void)playbackStateChanged:(NSNotification *)aNotification
 {
 	if ([self.streamer isWaiting])
@@ -101,5 +129,7 @@
 
         }
 }
+
+//-(void)
 
 @end
