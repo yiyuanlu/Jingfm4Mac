@@ -372,7 +372,7 @@ static void ASReadStreamCallBack
 			defaultButton:NSLocalizedString(@"OK", @"")
 			alternateButton:nil
 			otherButton:nil
-			informativeTextWithFormat:message];
+			informativeTextWithFormat:@"%@",message];
 	[alert
 		performSelector:@selector(runModal)
 		onThread:[NSThread mainThread]
@@ -1337,7 +1337,7 @@ cleanup:
 
 		if (discontinuous)
 		{
-			err = AudioFileStreamParseBytes(audioFileStream, length, bytes, kAudioFileStreamParseFlag_Discontinuity);
+			err = AudioFileStreamParseBytes(audioFileStream, (UInt32)length, bytes, kAudioFileStreamParseFlag_Discontinuity);
 			if (err)
 			{
 				[self failWithErrorCode:AS_FILE_STREAM_PARSE_BYTES_FAILED];
@@ -1346,7 +1346,7 @@ cleanup:
 		}
 		else
 		{
-			err = AudioFileStreamParseBytes(audioFileStream, length, bytes, 0);
+			err = AudioFileStreamParseBytes(audioFileStream, (UInt32)length, bytes, 0);
 			if (err)
 			{
 				[self failWithErrorCode:AS_FILE_STREAM_PARSE_BYTES_FAILED];
@@ -1381,11 +1381,11 @@ cleanup:
 
 		// enqueue buffer
 		AudioQueueBufferRef fillBuf = audioQueueBuffer[fillBufferIndex];
-		fillBuf->mAudioDataByteSize = bytesFilled;
+		fillBuf->mAudioDataByteSize = (UInt32)bytesFilled;
 		
 		if (packetsFilled)
 		{
-			err = AudioQueueEnqueueBuffer(audioQueue, fillBuf, packetsFilled, packetDescs);
+			err = AudioQueueEnqueueBuffer(audioQueue, fillBuf, (UInt32)packetsFilled, packetDescs);
 		}
 		else
 		{

@@ -55,6 +55,7 @@
                 NSDictionary *resDic = [response parsedBody:&error];
                 BOOL success = [[resDic objectForKey:@"success"] boolValue];
                 NSString *msg = SAFE_STR([resDic objectForKey:@"msg"]);
+            
                 //Check Response Body to get Data!
                 if(!error&&resDic&&success)
                 {
@@ -68,7 +69,6 @@
                     
                     [APP_DELEGATE changeViewState:EView_Playing];
                 
-                    
                 }
                 else
                 {
