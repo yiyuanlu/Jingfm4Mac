@@ -27,7 +27,7 @@
         //load music data
         [self loadMusic:[GlobalData sharedInstance].loginResult.pldItem.mid fid:[GlobalData sharedInstance].loginResult.pldItem.fid];
     
-        //[self loadOtherData];
+        //load pls
         [self loadPls:[GlobalData sharedInstance].loginResult.pldItem.cmbt st:[NSNumber numberWithInt:0]];
     }
     
@@ -97,12 +97,13 @@
 
 -(void)loadPls:(NSString *)cmbt st:(NSNumber *)st
 {
+    NSLog(@"loadPls ====");
     //fetch pls
     RKObjectMapping* songItemMapping = [RKObjectMapping mappingForClass:[SongItem class]];
     [songItemMapping mapAttributes:@"abid",@"aid",@"an",@"b",@"d",@"fid",@"mid",@"n",@"tid",nil];
     
     RKObjectMapping *resultMapping = [RKObjectMapping mappingForClass:[PLSResult class]];
-    [resultMapping mapKeyPathsToAttributes:@"total",@"moods", nil];
+    [resultMapping mapKeyPathsToAttributes:@"total",@"moods",@"moodids",@"normalmode",@"st",@"ps",nil];
     [resultMapping mapKeyPath:@"items" toRelationship:@"items" withMapping:songItemMapping];
     
     [[RKObjectManager sharedManager].mappingProvider setMapping:resultMapping forKeyPath:@"result"];
@@ -161,7 +162,7 @@
         loader.onDidLoadObject = ^(id object){
 //            NSLog(@"%@ [%@]",[object class],[(PLSResult *)object valueForKey:@"items"]);
             [GlobalData sharedInstance].plsResult = (PLSResult *)object;
-            NSLog(@"song items [%ld]",[[GlobalData sharedInstance].plsResult.items count]);
+            NSLog(@"songs[%ld] st[%d] ps[%d] total[%d]",[[GlobalData sharedInstance].plsResult.items count],[[GlobalData sharedInstance].plsResult.st intValue],[[GlobalData sharedInstance].plsResult.ps intValue],[[GlobalData sharedInstance].plsResult.total intValue]);
             
         };
     }];
@@ -196,7 +197,7 @@
 
 -(void)playSong:(NSString *)url
 {
-    self.streamer = [[AudioStreamer alloc] initWithURL:[NSURL URLWithString:[GlobalData sharedInstance].curSongUrl]];
+    self.streamer = [[AudioStreamer alloc] initWithURL:[NSURL URLWithString:url]];
 #ifdef PLAY_SONGS
     [self.streamer start];
     [[NSNotificationCenter defaultCenter]
@@ -211,19 +212,83 @@
 - (void)playbackStateChanged:(NSNotification *)aNotification
 {
 	if ([self.streamer isWaiting])
-        {
-
-        }
+    {
+        
+    }
 	else if ([self.streamer isPlaying])
-        {
+    {
 
-        }
+    }
 	else if ([self.streamer isIdle])
-        {
-
-        }
+    {
+        [self playingNext];
+    }
 }
 
-//-(void)
+-(void)playingNext
+{
+    [self.streamer stop];
+    self.streamer = nil;
+    
+    if([GlobalData sharedInstance].playingCache)
+    {
+        [GlobalData sharedInstance].playingCache = NO;
+    }
+    
+    NSArray *arrItems = [GlobalData sharedInstance].plsResult.items;
+    int arrCount = (int)[arrItems count];
+    int curIndex = [GlobalData sharedInstance].plsResult.cur;
+    
+    int total = [[GlobalData sharedInstance].plsResult.total intValue];
+    int st = [[GlobalData sharedInstance].plsResult.st intValue];
+    
+    //play next
+    if(arrCount>0&&curIndex<arrCount)
+    {
+        SongItem *songItem = [arrItems objectAtIndex:curIndex];
+        [self loadMusic:songItem.mid fid:songItem.fid];
+    
+        [GlobalData sharedInstance].plsResult.cur++;
+    }
+    else
+    {
+        NSLog(@"arrCount[%d] curIndex[%d] total[%d] st[%d]",arrCount,curIndex,total,st);
+    }
+    
+    //playing the eof
+    if([GlobalData sharedInstance].plsResult.cur == (arrCount-1))
+    {
+        if(total>0)
+        {
+            if((st+arrCount)<total)
+            {
+                if(st == 0)
+                {
+                    [self loadPls:[GlobalData sharedInstance].loginResult.pldItem.cmbt st:[NSNumber numberWithInt:arrCount+1]];
+                }
+                else
+                {
+                    [self loadPls:[GlobalData sharedInstance].loginResult.pldItem.cmbt st:[NSNumber numberWithInt:st+arrCount]];
+                }
+            }
+            else
+            {
+                [self loadPls:[GlobalData sharedInstance].loginResult.pldItem.cmbt st:[NSNumber numberWithInt:0]];
+            }
+            
+        }
+        else
+        {
+            //replaying
+            //[self.streamer start];
+        }
 
+    }
+    
+}
+
+-(IBAction)actPlayNext:(id)sender
+{
+    [self playingNext];
+}
 @end

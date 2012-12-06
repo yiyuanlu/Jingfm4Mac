@@ -91,9 +91,7 @@
             }
         };
         loader.onDidLoadObject = ^(id object){
-            NSLog(@"%@ [%@]",[object class],object);
             [GlobalData sharedInstance].loginResult = (LoginResult *)object;
-            NSLog(@"%d",[[GlobalData sharedInstance].loginResult.pldItem.uid intValue]);
             [APP_DELEGATE changeViewState:EView_Playing];
             
         };

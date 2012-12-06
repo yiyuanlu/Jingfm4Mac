@@ -33,4 +33,4 @@
 #define AM_COVER_IMGURL(fid) [NSString stringWithFormat:@"%@/album/AM/%@/%@/%@/%@/AM%@",IMAGE_DOMAIN,[fid substringToIndex:4],[fid substringWithRange:NSMakeRange(4,4)],[fid substringWithRange:NSMakeRange(8,2)],[fid substringWithRange:NSMakeRange(10,2)],fid]
 #define AT_COVER_IMGURL(fid) [NSString stringWithFormat:@"%@/album/AT/%@/%@/%@/%@/AT%@",IMAGE_DOMAIN,[fid substringToIndex:4],[fid substringWithRange:NSMakeRange(4,4)],[fid substringWithRange:NSMakeRange(8,2)],[fid substringWithRange:NSMakeRange(10,2)],fid]
 
-//#define PLAY_SONGS
+#define PLAY_SONGS

@@ -16,5 +16,5 @@
 @property (nonatomic,strong) NSNumber *normalmode;
 @property (nonatomic,strong) NSNumber *st;
 @property (nonatomic,strong) NSNumber *ps;
-@property (nonatomic,strong) NSNumber *cur;
+@property (nonatomic) int             cur;
 @end

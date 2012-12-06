@@ -17,5 +17,6 @@
 @property (nonatomic,readonly) NSString *atCoverImgUrl;
 @property (nonatomic,strong) PLSResult *plsResult;
 @property (nonatomic,strong) LoginResult *loginResult;
+@property (nonatomic) BOOL playingCache;
 + (GlobalData*) sharedInstance;
 @end
