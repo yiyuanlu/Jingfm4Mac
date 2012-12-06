@@ -10,7 +10,7 @@
 @class SongItem;
 @interface PLSResult : NSObject
 @property (nonatomic,strong) NSNumber *total;
-@property (nonatomic,strong) NSNumber *moods;
+@property (nonatomic,strong) NSArray *moods;
 @property (nonatomic,strong) NSArray *items;
 @property (nonatomic,strong) NSString *moodids;
 @property (nonatomic,strong) NSNumber *normalmode;

@@ -103,7 +103,7 @@
     [songItemMapping mapAttributes:@"abid",@"aid",@"an",@"b",@"d",@"fid",@"mid",@"n",@"tid",nil];
     
     RKObjectMapping *resultMapping = [RKObjectMapping mappingForClass:[PLSResult class]];
-    [resultMapping mapKeyPathsToAttributes:@"total",@"moods",@"moodids",@"normalmode",@"st",@"ps",nil];
+    [resultMapping mapAttributes:@"total",@"moods",@"moodids",@"normalmode",@"st",@"ps",nil];
     [resultMapping mapKeyPath:@"items" toRelationship:@"items" withMapping:songItemMapping];
     
     [[RKObjectManager sharedManager].mappingProvider setMapping:resultMapping forKeyPath:@"result"];
