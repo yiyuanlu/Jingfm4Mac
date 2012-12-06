@@ -9,5 +9,14 @@
 #import "PLSResult.h"
 
 @implementation PLSResult
-
+-(id)init
+{
+    self = [super init];
+    
+    if(self)
+    {
+        self.cur = 0;
+    }
+    return self;
+}
 @end

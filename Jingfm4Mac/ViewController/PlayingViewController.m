@@ -24,23 +24,25 @@
     {
         // Initialization code here.
     
-        //load music data
-        [self loadMusicData];
-        //set cover image
-        [self performSelectorInBackground:@selector(loadImageData) withObject:nil];
-        //load other data
-        [self loadOtherData];
+//        //load music data
+//        [self playerSong:[GlobalData sharedInstance].LastMid];
+//        //set cover image
+//        [self performSelectorInBackground:@selector(loadImageData) withObject:nil];
+//        //load other data
+//        [self loadOtherData];
     
     }
     
     return self;
 }
 
--(void)loadMusicData
+
+
+-(void)playerSong:(NSString *)mid
 {
     //get song url
     RKParams *params = [[RKParams alloc] init];
-    [params setValue:[GlobalData sharedInstance].LastMid forParam:@"mid"];
+    [params setValue:mid forParam:@"mid"];
     [params setValue:@"NO" forParam:@"type"];
     
     [[RKClient sharedClient] get:SONG_URL usingBlock:^(RKRequest *request) {
@@ -116,7 +118,7 @@
     [[RKObjectManager sharedManager] loadObjectsAtResourcePath:FETCH_PLS usingBlock:^(RKObjectLoader *loader) {
 
         //mapping
-        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:[GlobalData sharedInstance].Cmbt, @"q", @"5", @"ps",@"0", @"st",[GlobalData sharedInstance].Uid, @"u", nil, @"mt",nil];
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:[GlobalData sharedInstance].loginResult.pldItem.cmbt, @"q", @"5", @"ps",@"0", @"st",[GlobalData sharedInstance].loginResult.pldItem.uid, @"u", nil, @"mt",nil];
         RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[NSDictionary class]];
         [mapping mapAttributes:@"q",@"ps",@"st",@"u",@"mt", nil];
         RKObjectSerializer *serializer = [RKObjectSerializer serializerWithObject:dic mapping:mapping];
@@ -168,8 +170,8 @@
         };
         loader.onDidLoadObject = ^(id object){
 //            NSLog(@"%@ [%@]",[object class],[(PLSResult *)object valueForKey:@"items"]);
-            [GlobalData sharedInstance].songItesms = [(PLSResult *)object valueForKey:@"items"];
-            NSLog(@"song items [%ld]",[[GlobalData sharedInstance].songItesms count]);
+            [GlobalData sharedInstance].plsResult = (PLSResult *)object;
+            NSLog(@"song items [%ld]",[[GlobalData sharedInstance].plsResult.items count]);
             
         };
     }];

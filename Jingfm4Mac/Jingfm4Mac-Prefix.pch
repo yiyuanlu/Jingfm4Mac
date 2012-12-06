@@ -23,9 +23,14 @@
     #import <RestKit/RestKit.h>
     #import "GlobalData.h"
     #import "AppDelegate.h"
+    #import "LoginResult.h"
+    #import "PLDItem.h"
 #endif
 
 
 #define APP_DELEGATE (AppDelegate *)([NSApplication sharedApplication].delegate)
+
+#define AM_COVER_IMGURL(fid) [NSString stringWithFormat:@"%@/album/AM/%@/%@/%@/%@/AM%@",IMAGE_DOMAIN,[fid substringToIndex:4],[fid substringWithRange:NSMakeRange(4,4)],[fid substringWithRange:NSMakeRange(8,2)],[fid substringWithRange:NSMakeRange(10,2)],fid]
+#define AT_COVER_IMGURL(fid) [NSString stringWithFormat:@"%@/album/AT/%@/%@/%@/%@/AT%@",IMAGE_DOMAIN,[fid substringToIndex:4],[fid substringWithRange:NSMakeRange(4,4)],[fid substringWithRange:NSMakeRange(8,2)],[fid substringWithRange:NSMakeRange(10,2)],fid]
 
 //#define PLAY_SONGS

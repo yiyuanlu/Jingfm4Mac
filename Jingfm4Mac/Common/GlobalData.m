@@ -69,15 +69,7 @@
 #pragma mark -
 #pragma mark Custom Methods
 
--(void)setFid:(NSString *)Fid
-{
-    
-    _Fid = Fid;
-    _amCoverImgUrl = [NSString stringWithFormat:@"%@/album/AM/%@/%@/%@/%@/AM%@",IMAGE_DOMAIN,[self.Fid substringToIndex:4],[self.Fid substringWithRange:NSMakeRange(4,4)],[self.Fid substringWithRange:NSMakeRange(8,2)],[self.Fid substringWithRange:NSMakeRange(10,2)],self.Fid];
-    
-    _atCoverImgUrl = [NSString stringWithFormat:@"%@/album/AT/%@/%@/%@/%@/AT%@",IMAGE_DOMAIN,[self.Fid substringToIndex:4],[self.Fid substringWithRange:NSMakeRange(4,4)],[self.Fid substringWithRange:NSMakeRange(8,2)],[self.Fid substringWithRange:NSMakeRange(10,2)],self.Fid];
-    
-}
+
 
 // Add your custom methods here
 

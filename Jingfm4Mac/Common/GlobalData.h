@@ -7,17 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
-
+@class PLSResult;
+@class LoginResult;
 @interface GlobalData : NSObject
 @property (nonatomic,strong) NSString *JingAToken;
 @property (nonatomic,strong) NSString *JingRToken;
-@property (nonatomic,strong) NSString *LastMid;
-@property (nonatomic,strong) NSString *Cmbt;
-@property (nonatomic,strong) NSString *Uid;
-@property (nonatomic,strong) NSString *Fid;
 @property (nonatomic,strong) NSString *curSongUrl;
 @property (nonatomic,readonly) NSString *amCoverImgUrl;
 @property (nonatomic,readonly) NSString *atCoverImgUrl;
-@property (nonatomic,strong) NSArray *songItesms;
+@property (nonatomic,strong) PLSResult *plsResult;
+@property (nonatomic,strong) LoginResult *loginResult;
 + (GlobalData*) sharedInstance;
 @end
