@@ -27,3 +27,5 @@
 
 
 #define APP_DELEGATE (AppDelegate *)([NSApplication sharedApplication].delegate)
+
+//#define PLAY_SONGS

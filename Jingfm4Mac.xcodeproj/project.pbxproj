@@ -12,6 +12,7 @@
 		2C2E021E1664B9550014C7AC /* AudioStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2E021D1664B9550014C7AC /* AudioStreamer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		2C2E02201664B9710014C7AC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2E021F1664B9710014C7AC /* AudioToolbox.framework */; };
 		2C2E023C1665E2630014C7AC /* SongItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2E023B1665E2630014C7AC /* SongItem.m */; };
+		2C34856F166EFA2E005A6292 /* PLSResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C34856E166EFA2E005A6292 /* PLSResult.m */; };
 		2C86184A1657909D00755A47 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C8618491657909D00755A47 /* Cocoa.framework */; };
 		2C8618541657909D00755A47 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2C8618521657909D00755A47 /* InfoPlist.strings */; };
 		2C8618561657909E00755A47 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C8618551657909E00755A47 /* main.m */; };
@@ -47,6 +48,8 @@
 		2C2E021F1664B9710014C7AC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		2C2E023A1665E2630014C7AC /* SongItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SongItem.h; path = Model/SongItem.h; sourceTree = "<group>"; };
 		2C2E023B1665E2630014C7AC /* SongItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SongItem.m; path = Model/SongItem.m; sourceTree = "<group>"; };
+		2C34856D166EFA2E005A6292 /* PLSResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PLSResult.h; path = Model/PLSResult.h; sourceTree = "<group>"; };
+		2C34856E166EFA2E005A6292 /* PLSResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PLSResult.m; path = Model/PLSResult.m; sourceTree = "<group>"; };
 		2C8618451657909D00755A47 /* Jingfm4Mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Jingfm4Mac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C8618491657909D00755A47 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		2C86184C1657909D00755A47 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -87,6 +90,8 @@
 			children = (
 				2C2E023A1665E2630014C7AC /* SongItem.h */,
 				2C2E023B1665E2630014C7AC /* SongItem.m */,
+				2C34856D166EFA2E005A6292 /* PLSResult.h */,
+				2C34856E166EFA2E005A6292 /* PLSResult.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -261,6 +266,7 @@
 				2C2E020D166492590014C7AC /* PlayingViewController.m in Sources */,
 				2C2E021E1664B9550014C7AC /* AudioStreamer.m in Sources */,
 				2C2E023C1665E2630014C7AC /* SongItem.m in Sources */,
+				2C34856F166EFA2E005A6292 /* PLSResult.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

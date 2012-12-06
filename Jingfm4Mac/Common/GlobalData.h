@@ -18,5 +18,6 @@
 @property (nonatomic,strong) NSString *curSongUrl;
 @property (nonatomic,readonly) NSString *amCoverImgUrl;
 @property (nonatomic,readonly) NSString *atCoverImgUrl;
+@property (nonatomic,strong) NSArray *songItesms;
 + (GlobalData*) sharedInstance;
 @end

@@ -9,6 +9,7 @@
 #import "PlayingViewController.h"
 #import "AudioStreamer.h"
 #import "SongItem.h"
+#import "PLSResult.h"
 
 @interface PlayingViewController ()
 
@@ -58,7 +59,7 @@
         if (response.statusCode != 200)
             {
             //We got an error!
-            NSLog(@"http status code is not 200[%ld]",response.statusCode);
+            NSLog(@"http status code is not 200[%ld] __[%s]__ url [%@]",response.statusCode,__FUNCTION__,request.resourcePath);
             //[DROP_WINDOW showTips:@"对不起，服务器出错！"];
             }
         else
@@ -74,13 +75,14 @@
                 [GlobalData sharedInstance].curSongUrl = SAFE_STR([resDic objectForKey:@"result"]);
                 NSLog(@"song url [%@]",[GlobalData sharedInstance].curSongUrl);
                 self.streamer = [[AudioStreamer alloc] initWithURL:[NSURL URLWithString:[GlobalData sharedInstance].curSongUrl]];
+#ifdef PLAY_SONGS
                 [self.streamer start];
                 [[NSNotificationCenter defaultCenter]
                  addObserver:self
                  selector:@selector(playbackStateChanged:)
                  name:ASStatusChangedNotification
                  object:self.streamer];
-                
+#endif
                 }
             else
                 {
@@ -90,79 +92,86 @@
                 }
             }
         };
-        
-        
     }];
 }
 
 -(void)loadOtherData
 {
     //fetch pls
-    RKParams *params = [[RKParams alloc] init];
-    [params setValue:[GlobalData sharedInstance].Cmbt forParam:@"q"];
-    [params setValue:@"5" forParam:@"ps"];
-    [params setValue:@"0" forParam:@"st"];
-    [params setValue:[GlobalData sharedInstance].Uid forParam:@"u"];
-    [params setValue:@"0" forParam:@"u"];
-    [params setValue:nil forParam:@"mt"];
+    RKObjectMapping* songItemMapping = [RKObjectMapping mappingForClass:[SongItem class]];
+    [songItemMapping mapAttributes:@"abid",@"aid",@"an",@"b",@"d",@"fid",@"mid",@"n",@"tid",nil];
+//    [[RKObjectManager sharedManager].mappingProvider setMapping:songItemMapping forKeyPath:@"items"];
     
+//    RKObjectMapping* resMapping = [RKObjectMapping mappingForClass:[NSDictionary class]];
+//    [[RKObjectManager sharedManager].mappingProvider setMapping:resMapping forKeyPath:@"result"];
     
-    //setup mapping
-    RKObjectMapping* appNodeMapping = [RKObjectMapping mappingForClass:[SongItem class]];
+    RKObjectMapping *resultMapping = [RKObjectMapping mappingForClass:[PLSResult class]];
+    [resultMapping mapKeyPathsToAttributes:@"total",@"moods", nil];
+    [resultMapping mapKeyPath:@"items" toRelationship:@"items" withMapping:songItemMapping];
+    
+    [[RKObjectManager sharedManager].mappingProvider setMapping:resultMapping forKeyPath:@"result"];
+    
+//    [[RKObjectManager sharedManager].mappingProvider registerMapping:songItemMapping withRootKeyPath:@"result"];
+    //post request
+    [[RKObjectManager sharedManager] loadObjectsAtResourcePath:FETCH_PLS usingBlock:^(RKObjectLoader *loader) {
 
-    
-    [[RKObjectManager sharedManager].mappingProvider setMapping:appNodeMapping forKeyPath:@"Apps"];
-    
-    [[RKClient sharedClient] get:FETCH_PLS usingBlock:^(RKRequest *request) {
-        request.params = params;
-        request.method = RKRequestMethodPOST;
-        request.additionalHTTPHeaders = [NSDictionary dictionaryWithKeysAndObjects:@"Jing-A-Token-Header",[GlobalData sharedInstance].JingAToken, nil];
+        //mapping
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:[GlobalData sharedInstance].Cmbt, @"q", @"5", @"ps",@"0", @"st",[GlobalData sharedInstance].Uid, @"u", nil, @"mt",nil];
+        RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[NSDictionary class]];
+        [mapping mapAttributes:@"q",@"ps",@"st",@"u",@"mt", nil];
+        RKObjectSerializer *serializer = [RKObjectSerializer serializerWithObject:dic mapping:mapping];
+        NSError *error = nil;
+        id<RKRequestSerializable> serialization = [serializer serializationForMIMEType:@"application/x-www-form-urlencoded" error:&error];
+        loader.params = serialization;
+        //other & add Header
+        loader.method = RKRequestMethodPOST;
+        loader.additionalHTTPHeaders = [NSDictionary dictionaryWithKeysAndObjects:@"Jing-A-Token-Header",[GlobalData sharedInstance].JingAToken,@"Referer",@"http://jing.fm/",nil];
+
+        //NSLog(@"%@",STR_FROM_BOOL([loader prepareURLRequest]));
+        //NSLog(@"%@",[loader.URLRequest allHTTPHeaderFields]);
         
-        request.onDidFailLoadWithError = ^(NSError *error)
+        loader.onDidFailLoadWithError = ^(NSError *error)
         {
-        NSLog(@"onDidFailLoadWithError error [%@]",error);
-        //[DROP_WINDOW showTips:error.localizedDescription];
+            NSLog(@"onDidFailLoadWithError error [%@]",error);
+            //[DROP_WINDOW showTips:error.localizedDescription];
         };
-        request.onDidLoadResponse = ^(RKResponse *response)
-        {
         
-        if (response.statusCode != 200)
+        loader.onDidLoadResponse = ^(RKResponse *response)
+        {
+            //NSLog(@"%@",response.bodyAsString);
+            if (response.statusCode != 200)
             {
-            //We got an error!
-            NSLog(@"http status code is not 200[%ld]",response.statusCode);
-            //[DROP_WINDOW showTips:@"对不起，服务器出错！"];
+                //We got an error!
+                NSLog(@"http status code is not 200[%ld] __[%s]__ url [%@]",response.statusCode,__FUNCTION__,loader.resourcePath);
+                //[DROP_WINDOW showTips:@"对不起，服务器出错！"];
             }
-        else
+            else
             {
-            NSError *error = nil;
-            NSDictionary *resDic = [response parsedBody:&error];
-            BOOL success = [[resDic objectForKey:@"success"] boolValue];
-            NSString *msg = SAFE_STR([resDic objectForKey:@"msg"]);
-            //Check Response Body to get Data!
-            if(!error&&resDic&&success)
+                NSError *error = nil;
+                NSDictionary *resDic = [response parsedBody:&error];
+                BOOL success = [[resDic objectForKey:@"success"] boolValue];
+                NSString *msg = SAFE_STR([resDic objectForKey:@"msg"]);
+                //Check Response Body to get Data!
+                if(!error&&resDic&&success)
                 {
-                //NSLog(@"resDic [%@]",resDic);
-                [GlobalData sharedInstance].curSongUrl = SAFE_STR([resDic objectForKey:@"result"]);
-                NSLog(@"song url [%@]",[GlobalData sharedInstance].curSongUrl);
-                self.streamer = [[AudioStreamer alloc] initWithURL:[NSURL URLWithString:[GlobalData sharedInstance].curSongUrl]];
-                [self.streamer start];
-                [[NSNotificationCenter defaultCenter]
-                 addObserver:self
-                 selector:@selector(playbackStateChanged:)
-                 name:ASStatusChangedNotification
-                 object:self.streamer];
+                    //NSLog(@"resDic [%@]",resDic);
+
                 
                 }
-            else
+                else
                 {
-                NSLog(@"%@",msg);
-                NSLog(@"200 error [%@]",[error description]);
-                //                [DROP_WINDOW showTips:error.localizedDescription];
+                    NSLog(@"%@",msg);
+                    NSLog(@"200 error [%@]",[error description]);
+                    //                [DROP_WINDOW showTips:error.localizedDescription];
                 }
             }
         };
-        
-        
+        loader.onDidLoadObject = ^(id object){
+//            NSLog(@"%@ [%@]",[object class],[(PLSResult *)object valueForKey:@"items"]);
+            [GlobalData sharedInstance].songItesms = [(PLSResult *)object valueForKey:@"items"];
+            NSLog(@"song items [%ld]",[[GlobalData sharedInstance].songItesms count]);
+            
+        };
     }];
 }
 

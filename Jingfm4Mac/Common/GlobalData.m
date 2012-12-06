@@ -7,6 +7,7 @@
 //
 
 #import "GlobalData.h"
+#import "SongItem.h"
 
 @implementation GlobalData
 #pragma mark -
@@ -22,7 +23,10 @@
             
             [RKClient setSharedClient:[[RKClient alloc] initWithBaseURLString:API1_URL]];
             [RKObjectManager setSharedManager:[RKObjectManager objectManagerWithBaseURLString:API1_URL]];
+            Class<RKParser> parser = [[RKParserRegistry sharedRegistry] parserClassForMIMEType:@"application/json"];
             
+            [[RKParserRegistry sharedRegistry] setParserClass:parser forMIMEType:@"text/plain"];
+            [[RKParserRegistry sharedRegistry] setParserClass:parser forMIMEType:@"text/html"];
             
 			});
         
