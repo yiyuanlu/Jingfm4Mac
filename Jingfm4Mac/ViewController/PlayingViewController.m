@@ -23,22 +23,26 @@
     if (self)
     {
         // Initialization code here.
+
+        //load music data
+        [self loadMusic:[GlobalData sharedInstance].loginResult.pldItem.mid fid:[GlobalData sharedInstance].loginResult.pldItem.fid];
     
-//        //load music data
-//        [self playerSong:[GlobalData sharedInstance].LastMid];
-//        //set cover image
-//        [self performSelectorInBackground:@selector(loadImageData) withObject:nil];
-//        //load other data
-//        [self loadOtherData];
-    
+        //[self loadOtherData];
+        [self loadPls:[GlobalData sharedInstance].loginResult.pldItem.cmbt st:[NSNumber numberWithInt:0]];
     }
     
     return self;
 }
 
+- (void)loadMusic:(NSString *)mid fid:(NSString *)fid
+{
+    [self loadSong:mid];
+    [self loadImageCover:fid];
+}
 
 
--(void)playerSong:(NSString *)mid
+
+-(void)loadSong:(NSString *)mid
 {
     //get song url
     RKParams *params = [[RKParams alloc] init];
@@ -75,16 +79,10 @@
                 {
                 //NSLog(@"resDic [%@]",resDic);
                 [GlobalData sharedInstance].curSongUrl = SAFE_STR([resDic objectForKey:@"result"]);
+                
                 NSLog(@"song url [%@]",[GlobalData sharedInstance].curSongUrl);
-                self.streamer = [[AudioStreamer alloc] initWithURL:[NSURL URLWithString:[GlobalData sharedInstance].curSongUrl]];
-#ifdef PLAY_SONGS
-                [self.streamer start];
-                [[NSNotificationCenter defaultCenter]
-                 addObserver:self
-                 selector:@selector(playbackStateChanged:)
-                 name:ASStatusChangedNotification
-                 object:self.streamer];
-#endif
+                
+                [self playSong:[GlobalData sharedInstance].curSongUrl];
                 }
             else
                 {
@@ -97,15 +95,11 @@
     }];
 }
 
--(void)loadOtherData
+-(void)loadPls:(NSString *)cmbt st:(NSNumber *)st
 {
     //fetch pls
     RKObjectMapping* songItemMapping = [RKObjectMapping mappingForClass:[SongItem class]];
     [songItemMapping mapAttributes:@"abid",@"aid",@"an",@"b",@"d",@"fid",@"mid",@"n",@"tid",nil];
-//    [[RKObjectManager sharedManager].mappingProvider setMapping:songItemMapping forKeyPath:@"items"];
-    
-//    RKObjectMapping* resMapping = [RKObjectMapping mappingForClass:[NSDictionary class]];
-//    [[RKObjectManager sharedManager].mappingProvider setMapping:resMapping forKeyPath:@"result"];
     
     RKObjectMapping *resultMapping = [RKObjectMapping mappingForClass:[PLSResult class]];
     [resultMapping mapKeyPathsToAttributes:@"total",@"moods", nil];
@@ -113,12 +107,11 @@
     
     [[RKObjectManager sharedManager].mappingProvider setMapping:resultMapping forKeyPath:@"result"];
     
-//    [[RKObjectManager sharedManager].mappingProvider registerMapping:songItemMapping withRootKeyPath:@"result"];
     //post request
     [[RKObjectManager sharedManager] loadObjectsAtResourcePath:FETCH_PLS usingBlock:^(RKObjectLoader *loader) {
 
         //mapping
-        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:[GlobalData sharedInstance].loginResult.pldItem.cmbt, @"q", @"5", @"ps",@"0", @"st",[GlobalData sharedInstance].loginResult.pldItem.uid, @"u", nil, @"mt",nil];
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:cmbt, @"q", @"5", @"ps",st, @"st",[GlobalData sharedInstance].loginResult.pldItem.uid, @"u", nil, @"mt",nil];
         RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[NSDictionary class]];
         [mapping mapAttributes:@"q",@"ps",@"st",@"u",@"mt", nil];
         RKObjectSerializer *serializer = [RKObjectSerializer serializerWithObject:dic mapping:mapping];
@@ -128,9 +121,6 @@
         //other & add Header
         loader.method = RKRequestMethodPOST;
         loader.additionalHTTPHeaders = [NSDictionary dictionaryWithKeysAndObjects:@"Jing-A-Token-Header",[GlobalData sharedInstance].JingAToken,@"Referer",@"http://jing.fm/",nil];
-
-        //NSLog(@"%@",STR_FROM_BOOL([loader prepareURLRequest]));
-        //NSLog(@"%@",[loader.URLRequest allHTTPHeaderFields]);
         
         loader.onDidFailLoadWithError = ^(NSError *error)
         {
@@ -177,26 +167,44 @@
     }];
 }
 
--(void)loadImageData
+-(void)loadImageCover:(NSString *)fid
 {
-    NSURL *imageURL = [NSURL URLWithString:[GlobalData sharedInstance].amCoverImgUrl];
-    NSError *error = nil;
-    NSData *data = [NSData dataWithContentsOfURL:imageURL
-                                         options:0
-                                           error:&error];
-    
-    NSImage *imageFromBundle = [[NSImage alloc] initWithData:data];
-    
-    
-    if (imageFromBundle&&data)
-    {
-        // The image loaded properly, so lets display it.
-        self.diskImage.image = imageFromBundle;
-    }
-    else
-    {
-        NSLog(@"imageView could not be loaded.");
-    }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        NSURL *imageURL = [NSURL URLWithString:AM_COVER_IMGURL(fid)];
+        NSError *error = nil;
+        NSData *data = [NSData dataWithContentsOfURL:imageURL
+                                             options:0
+                                               error:&error];
+        NSImage *imageFromBundle = [[NSImage alloc] initWithData:data];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+
+            if (imageFromBundle&&data)
+                {
+                // The image loaded properly, so lets display it.
+                self.diskImage.image = imageFromBundle;
+                }
+            else
+                {
+                NSLog(@"imageView could not be loaded.");
+                }
+        });
+    });
+
+}
+
+-(void)playSong:(NSString *)url
+{
+    self.streamer = [[AudioStreamer alloc] initWithURL:[NSURL URLWithString:[GlobalData sharedInstance].curSongUrl]];
+#ifdef PLAY_SONGS
+    [self.streamer start];
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(playbackStateChanged:)
+     name:ASStatusChangedNotification
+     object:self.streamer];
+#endif
 }
 
 

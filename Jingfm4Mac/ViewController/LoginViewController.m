@@ -80,7 +80,6 @@
 //                [GlobalData sharedInstance].Uid = SAFE_STR([pld objectForKey:@"uid"]);
 //                [GlobalData sharedInstance].Fid = SAFE_STR([pld objectForKey:@"fid"]);
 //                
-                [APP_DELEGATE changeViewState:EView_Playing];
                 
                 }
             else
@@ -95,6 +94,7 @@
             NSLog(@"%@ [%@]",[object class],object);
             [GlobalData sharedInstance].loginResult = (LoginResult *)object;
             NSLog(@"%d",[[GlobalData sharedInstance].loginResult.pldItem.uid intValue]);
+            [APP_DELEGATE changeViewState:EView_Playing];
             
         };
     }];
