@@ -25,4 +25,6 @@
 
 
 -(IBAction)actPlayNext:(id)sender;
+-(IBAction)actLove:(id)sender;
+-(IBAction)actHate:(id)sender;
 @end

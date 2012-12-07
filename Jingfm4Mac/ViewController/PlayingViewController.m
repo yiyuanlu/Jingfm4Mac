@@ -199,7 +199,7 @@
 {
     //report playing data
     NSTimeInterval timeSince = -[self.dataForReport timeIntervalSinceNow];
-    if(timeSince>=10.0f)
+    if(timeSince>=10.0f&&[self.streamer isPlaying])
     {
         self.dataForReport = [NSDate date];
         [self reportPlayingData];
@@ -327,7 +327,14 @@
 {
     [self playingNext];
 }
-
+-(IBAction)actLove:(id)sender
+{
+    [self reportLove];
+}
+-(IBAction)actHate:(id)sender
+{
+    [self reportHate];
+}
 -(void)reportPlayingData
 {    
     [[RKClient sharedClient] get:REPORT_PLAYING usingBlock:^(RKRequest *request) {
@@ -369,6 +376,111 @@
                 {
                 NSLog(@"resDic [%@]",resDic);
 
+                }
+            else
+                {
+                NSLog(@"%@",msg);
+                NSLog(@"200 error [%@]",[error description]);
+                //                [DROP_WINDOW showTips:error.localizedDescription];
+                }
+            }
+        };
+    }];
+}
+
+-(void)reportLove
+{
+    [[RKClient sharedClient] get:LOVE_SONG usingBlock:^(RKRequest *request) {
+        
+        //mapping
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:[GlobalData sharedInstance].uid, @"uid", [GlobalData sharedInstance].curCmbt, @"cmbt",[GlobalData sharedInstance].curTid, @"tid",@"1", @"c",[GlobalData sharedInstance].plsResult.moodids,@"moodTagIds", nil];
+        
+        RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[NSDictionary class]];
+        [mapping mapAttributes:@"uid",@"cmbt",@"tid",@"c",@"moodTagIds",nil];
+        RKObjectSerializer *serializer = [RKObjectSerializer serializerWithObject:dic mapping:mapping];
+        NSError *error = nil;
+        id<RKRequestSerializable> serialization = [serializer serializationForMIMEType:@"application/x-www-form-urlencoded" error:&error];
+        request.params = serialization;
+        request.method = RKRequestMethodPOST;
+        request.additionalHTTPHeaders = [NSDictionary dictionaryWithKeysAndObjects:@"Jing-A-Token-Header",[GlobalData sharedInstance].JingAToken, nil];
+        
+        request.onDidFailLoadWithError = ^(NSError *error)
+        {
+        NSLog(@"onDidFailLoadWithError error [%@]",error);
+        //[DROP_WINDOW showTips:error.localizedDescription];
+        };
+        request.onDidLoadResponse = ^(RKResponse *response)
+        {
+        
+        if (response.statusCode != 200)
+            {
+            //We got an error!
+            NSLog(@"http status code is not 200[%ld] __[%s]__ url [%@]",response.statusCode,__FUNCTION__,request.resourcePath);
+            //[DROP_WINDOW showTips:@"对不起，服务器出错！"];
+            }
+        else
+            {
+            NSError *error = nil;
+            NSDictionary *resDic = [response parsedBody:&error];
+            BOOL success = [[resDic objectForKey:@"success"] boolValue];
+            NSString *msg = SAFE_STR([resDic objectForKey:@"msg"]);
+            //Check Response Body to get Data!
+            if(!error&&resDic&&success)
+                {
+                NSLog(@"resDic [%@]",resDic);
+                
+                }
+            else
+                {
+                NSLog(@"%@",msg);
+                NSLog(@"200 error [%@]",[error description]);
+                //                [DROP_WINDOW showTips:error.localizedDescription];
+                }
+            }
+        };
+    }];
+}
+-(void)reportHate
+{
+    [[RKClient sharedClient] get:HATE_SONG usingBlock:^(RKRequest *request) {
+        
+        //mapping
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:[GlobalData sharedInstance].uid, @"uid", [GlobalData sharedInstance].curCmbt, @"cmbt",[GlobalData sharedInstance].curTid, @"tid",@"1", @"c", nil];
+        
+        RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[NSDictionary class]];
+        [mapping mapAttributes:@"uid",@"cmbt",@"tid",@"c",nil];
+        RKObjectSerializer *serializer = [RKObjectSerializer serializerWithObject:dic mapping:mapping];
+        NSError *error = nil;
+        id<RKRequestSerializable> serialization = [serializer serializationForMIMEType:@"application/x-www-form-urlencoded" error:&error];
+        request.params = serialization;
+        request.method = RKRequestMethodPOST;
+        request.additionalHTTPHeaders = [NSDictionary dictionaryWithKeysAndObjects:@"Jing-A-Token-Header",[GlobalData sharedInstance].JingAToken, nil];
+        
+        request.onDidFailLoadWithError = ^(NSError *error)
+        {
+        NSLog(@"onDidFailLoadWithError error [%@]",error);
+        //[DROP_WINDOW showTips:error.localizedDescription];
+        };
+        request.onDidLoadResponse = ^(RKResponse *response)
+        {
+        
+        if (response.statusCode != 200)
+            {
+            //We got an error!
+            NSLog(@"http status code is not 200[%ld] __[%s]__ url [%@]",response.statusCode,__FUNCTION__,request.resourcePath);
+            //[DROP_WINDOW showTips:@"对不起，服务器出错！"];
+            }
+        else
+            {
+            NSError *error = nil;
+            NSDictionary *resDic = [response parsedBody:&error];
+            BOOL success = [[resDic objectForKey:@"success"] boolValue];
+            NSString *msg = SAFE_STR([resDic objectForKey:@"msg"]);
+            //Check Response Body to get Data!
+            if(!error&&resDic&&success)
+                {
+                NSLog(@"resDic [%@]",resDic);
+                
                 }
             else
                 {

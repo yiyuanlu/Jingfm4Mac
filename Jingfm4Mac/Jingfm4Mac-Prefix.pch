@@ -12,6 +12,8 @@
 #define FETCH_TRACKS        @"/music/fetch_track_infos"
 #define SONG_URL            @"/media/song/surl"
 #define REPORT_PLAYING      @"/account/post_playing_data"
+#define LOVE_SONG           @"/music/post_love_song"
+#define HATE_SONG           @"/music/post_hate_song"
 
 #define JING_HEAD_A_KEY     @"Jing-A-Token-Header"
 #define JING_HEAD_R_KEY     @"Jing-R-Token-Header"
