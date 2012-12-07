@@ -195,17 +195,47 @@
 
 }
 
+-(void)updateTimer:(NSTimer *)timer
+{
+    //report playing data
+    NSTimeInterval timeSince = -[self.dataForReport timeIntervalSinceNow];
+    if(timeSince>=10.0f)
+    {
+        self.dataForReport = [NSDate date];
+        [self reportPlayingData];
+    }
+}
 -(void)playSong:(NSString *)url
 {
     self.streamer = [[AudioStreamer alloc] initWithURL:[NSURL URLWithString:url]];
 #ifdef PLAY_SONGS
     [self.streamer start];
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(playbackStateChanged:)
-     name:ASStatusChangedNotification
-     object:self.streamer];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackStateChanged:) name:ASStatusChangedNotification object:self.streamer];
 #endif
+    
+    self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(updateTimer:) userInfo:nil repeats:YES];
+    self.dataForReport = [NSDate date];
+}
+
+-(void)stopSong
+{
+    [self.streamer stop];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:ASStatusChangedNotification
+                                                  object:self.streamer];
+    if(self.updateTimer)
+    {
+		[self.updateTimer invalidate];
+        self.updateTimer = nil;
+    }
+    self.streamer = nil;
+    
+}
+
+-(void)dealloc
+{
+    [self stopSong];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 
@@ -213,22 +243,27 @@
 {
 	if ([self.streamer isWaiting])
     {
-        
+        NSLog(@" isWaiting progress [%lf] dur [%lf] bitrate[%d]",self.streamer.progress,self.streamer.duration,self.streamer.bitRate);
     }
 	else if ([self.streamer isPlaying])
     {
-
+        if([GlobalData sharedInstance].playingCache&&![GlobalData sharedInstance].roleBackCache)
+        {
+            [GlobalData sharedInstance].roleBackCache = YES;
+            [self.streamer seekToTime:[[GlobalData sharedInstance].loginResult.pldItem.ct doubleValue]];
+        }
+        NSLog(@"isPlaying progress [%lf] dur [%lf] bitrate[%d]",self.streamer.progress,self.streamer.duration,self.streamer.bitRate);
     }
 	else if ([self.streamer isIdle])
     {
+        NSLog(@"isIdle progress [%lf] dur [%lf] bitrate[%d]",self.streamer.progress,self.streamer.duration,self.streamer.bitRate);    
         [self playingNext];
     }
 }
 
 -(void)playingNext
 {
-    [self.streamer stop];
-    self.streamer = nil;
+    [self stopSong];
     
     if([GlobalData sharedInstance].playingCache)
     {
@@ -246,6 +281,7 @@
     if(arrCount>0&&curIndex<arrCount)
     {
         SongItem *songItem = [arrItems objectAtIndex:curIndex];
+        [GlobalData sharedInstance].curTid = songItem.tid;
         [self loadMusic:songItem.mid fid:songItem.fid];
     
         [GlobalData sharedInstance].plsResult.cur++;
@@ -290,5 +326,58 @@
 -(IBAction)actPlayNext:(id)sender
 {
     [self playingNext];
+}
+
+-(void)reportPlayingData
+{    
+    [[RKClient sharedClient] get:REPORT_PLAYING usingBlock:^(RKRequest *request) {
+        
+        //mapping
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:[GlobalData sharedInstance].uid, @"uid", [GlobalData sharedInstance].curCmbt, @"cmbt",[GlobalData sharedInstance].curTid, @"tid",[NSString stringWithFormat:@"%d",(int)self.streamer.progress], @"ct", nil];
+        
+        RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[NSDictionary class]];
+        [mapping mapAttributes:@"uid",@"cmbt",@"tid",@"ct",nil];
+        RKObjectSerializer *serializer = [RKObjectSerializer serializerWithObject:dic mapping:mapping];
+        NSError *error = nil;
+        id<RKRequestSerializable> serialization = [serializer serializationForMIMEType:@"application/x-www-form-urlencoded" error:&error];
+        request.params = serialization;
+        request.method = RKRequestMethodPOST;
+        request.additionalHTTPHeaders = [NSDictionary dictionaryWithKeysAndObjects:@"Jing-A-Token-Header",[GlobalData sharedInstance].JingAToken, nil];
+        
+        request.onDidFailLoadWithError = ^(NSError *error)
+        {
+        NSLog(@"onDidFailLoadWithError error [%@]",error);
+        //[DROP_WINDOW showTips:error.localizedDescription];
+        };
+        request.onDidLoadResponse = ^(RKResponse *response)
+        {
+        
+        if (response.statusCode != 200)
+            {
+            //We got an error!
+            NSLog(@"http status code is not 200[%ld] __[%s]__ url [%@]",response.statusCode,__FUNCTION__,request.resourcePath);
+            //[DROP_WINDOW showTips:@"对不起，服务器出错！"];
+            }
+        else
+            {
+            NSError *error = nil;
+            NSDictionary *resDic = [response parsedBody:&error];
+            BOOL success = [[resDic objectForKey:@"success"] boolValue];
+            NSString *msg = SAFE_STR([resDic objectForKey:@"msg"]);
+            //Check Response Body to get Data!
+            if(!error&&resDic&&success)
+                {
+                NSLog(@"resDic [%@]",resDic);
+
+                }
+            else
+                {
+                NSLog(@"%@",msg);
+                NSLog(@"200 error [%@]",[error description]);
+                //                [DROP_WINDOW showTips:error.localizedDescription];
+                }
+            }
+        };
+    }];
 }
 @end

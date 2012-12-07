@@ -92,6 +92,9 @@
         };
         loader.onDidLoadObject = ^(id object){
             [GlobalData sharedInstance].loginResult = (LoginResult *)object;
+            [GlobalData sharedInstance].uid = [GlobalData sharedInstance].loginResult.pldItem.uid;
+            [GlobalData sharedInstance].curCmbt = [GlobalData sharedInstance].loginResult.pldItem.cmbt;
+            [GlobalData sharedInstance].curTid = [GlobalData sharedInstance].loginResult.pldItem.tid;
             [APP_DELEGATE changeViewState:EView_Playing];
             
         };

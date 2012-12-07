@@ -22,6 +22,7 @@
 			_sharedInstance = [[super allocWithZone:nil] init];
             
             _sharedInstance.playingCache = YES;
+            _sharedInstance.roleBackCache = NO;
             [RKClient setSharedClient:[[RKClient alloc] initWithBaseURLString:API1_URL]];
             [RKObjectManager setSharedManager:[RKObjectManager objectManagerWithBaseURLString:API1_URL]];
             Class<RKParser> parser = [[RKParserRegistry sharedRegistry] parserClassForMIMEType:@"application/json"];

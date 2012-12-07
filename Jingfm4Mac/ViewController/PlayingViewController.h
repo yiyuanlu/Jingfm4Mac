@@ -20,6 +20,9 @@
 @property (nonatomic,strong) IBOutlet NSButton *btnLogout;
 @property (nonatomic,strong) IBOutlet NSTextField *txfName;
 @property (nonatomic,strong) AudioStreamer *streamer;
+@property (nonatomic,strong) NSTimer *updateTimer;
+@property (nonatomic,strong) NSDate *dataForReport;
+
 
 -(IBAction)actPlayNext:(id)sender;
 @end
