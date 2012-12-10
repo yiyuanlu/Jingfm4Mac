@@ -24,12 +24,15 @@
     if (self)
     {
         // Initialization code here.
-
+        self.txfSearch.stringValue = [GlobalData sharedInstance].curCmbt;
         //load music data
-        [self loadMusic:[GlobalData sharedInstance].loginResult.pldItem.mid fid:[GlobalData sharedInstance].loginResult.pldItem.fid];
+        [self loadMusic:[GlobalData sharedInstance].loginResult.pldItem.mid
+                    fid:[GlobalData sharedInstance].loginResult.pldItem.fid];
     
         //load pls
-        [self loadPls:[GlobalData sharedInstance].loginResult.pldItem.cmbt st:[NSNumber numberWithInt:0]];
+        [self loadPls:[GlobalData sharedInstance].loginResult.pldItem.cmbt
+                   st:[NSNumber numberWithInt:0]
+              playNow:NO];
     }
     
     return self;
@@ -96,7 +99,7 @@
     }];
 }
 
--(void)loadPls:(NSString *)cmbt st:(NSNumber *)st
+-(void)loadPls:(NSString *)cmbt st:(NSNumber *)st playNow:(BOOL)playNow
 {
     NSLog(@"loadPls ====");
     //fetch pls
@@ -164,6 +167,12 @@
 //            NSLog(@"%@ [%@]",[object class],[(PLSResult *)object valueForKey:@"items"]);
             [GlobalData sharedInstance].plsResult = (PLSResult *)object;
             NSLog(@"songs[%ld] st[%d] ps[%d] total[%d]",[[GlobalData sharedInstance].plsResult.items count],[[GlobalData sharedInstance].plsResult.st intValue],[[GlobalData sharedInstance].plsResult.ps intValue],[[GlobalData sharedInstance].plsResult.total intValue]);
+            
+            if(playNow)
+            {
+                [GlobalData sharedInstance].curCmbt = self.txfSearch.stringValue;
+                [self playingNext];
+            }
             
         };
     }];
@@ -244,7 +253,7 @@
 {
 	if ([self.streamer isWaiting])
     {
-        NSLog(@" isWaiting progress [%lf] dur [%lf] bitrate[%d]",self.streamer.progress,self.streamer.duration,self.streamer.bitRate);
+//        NSLog(@" isWaiting progress [%lf] dur [%lf] bitrate[%d]",self.streamer.progress,self.streamer.duration,self.streamer.bitRate);
     }
 	else if ([self.streamer isPlaying])
     {
@@ -253,11 +262,11 @@
             [GlobalData sharedInstance].roleBackCache = YES;
             [self.streamer seekToTime:[[GlobalData sharedInstance].loginResult.pldItem.ct doubleValue]];
         }
-        NSLog(@"isPlaying progress [%lf] dur [%lf] bitrate[%d]",self.streamer.progress,self.streamer.duration,self.streamer.bitRate);
+//        NSLog(@"isPlaying progress [%lf] dur [%lf] bitrate[%d]",self.streamer.progress,self.streamer.duration,self.streamer.bitRate);
     }
 	else if ([self.streamer isIdle])
     {
-        NSLog(@"isIdle progress [%lf] dur [%lf] bitrate[%d]",self.streamer.progress,self.streamer.duration,self.streamer.bitRate);    
+//        NSLog(@"isIdle progress [%lf] dur [%lf] bitrate[%d]",self.streamer.progress,self.streamer.duration,self.streamer.bitRate);    
         [self playingNext];
     }
 }
@@ -270,6 +279,14 @@
     {
         [GlobalData sharedInstance].playingCache = NO;
     }
+    
+    //check cmbt
+    if(![[GlobalData sharedInstance].curCmbt isEqualToString:self.txfSearch.stringValue])
+    {
+        [self loadPls:self.txfSearch.stringValue st:[NSNumber numberWithInt:0] playNow:YES];
+        return;
+    }
+
     
     NSArray *arrItems = [GlobalData sharedInstance].plsResult.items;
     int arrCount = (int)[arrItems count];
@@ -301,16 +318,22 @@
             {
                 if(st == 0)
                 {
-                    [self loadPls:[GlobalData sharedInstance].loginResult.pldItem.cmbt st:[NSNumber numberWithInt:arrCount+1]];
+                    [self loadPls:[GlobalData sharedInstance].loginResult.pldItem.cmbt
+                               st:[NSNumber numberWithInt:arrCount+1]
+                          playNow:NO];
                 }
                 else
                 {
-                    [self loadPls:[GlobalData sharedInstance].loginResult.pldItem.cmbt st:[NSNumber numberWithInt:st+arrCount]];
+                    [self loadPls:[GlobalData sharedInstance].loginResult.pldItem.cmbt
+                               st:[NSNumber numberWithInt:st+arrCount]
+                          playNow:NO];
                 }
             }
             else
             {
-                [self loadPls:[GlobalData sharedInstance].loginResult.pldItem.cmbt st:[NSNumber numberWithInt:0]];
+                [self loadPls:[GlobalData sharedInstance].loginResult.pldItem.cmbt
+                           st:[NSNumber numberWithInt:0]
+                      playNow:NO];
             }
             
         }
@@ -323,8 +346,9 @@
     }
     
 }
+
 -(void)reportPlayingData
-{    
+{
     [[RKClient sharedClient] get:REPORT_PLAYING usingBlock:^(RKRequest *request) {
         
         //mapping
