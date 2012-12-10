@@ -14,6 +14,8 @@
 #define REPORT_PLAYING      @"/account/post_playing_data"
 #define LOVE_SONG           @"/music/post_love_song"
 #define HATE_SONG           @"/music/post_hate_song"
+#define FETCH_POP           @"/badge/fetch_pop"
+#define SEARCH_KEYWORDS     @"/search/ling/auto"
 
 #define JING_HEAD_A_KEY     @"Jing-A-Token-Header"
 #define JING_HEAD_R_KEY     @"Jing-R-Token-Header"

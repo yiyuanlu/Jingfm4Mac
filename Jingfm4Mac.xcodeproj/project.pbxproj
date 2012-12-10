@@ -15,6 +15,7 @@
 		2C34856F166EFA2E005A6292 /* PLSResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C34856E166EFA2E005A6292 /* PLSResult.m */; };
 		2C3485871670784C005A6292 /* PLDItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C3485861670784B005A6292 /* PLDItem.m */; };
 		2C34858A16708DE4005A6292 /* LoginResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C34858916708DE3005A6292 /* LoginResult.m */; };
+		2C4E125C1675BED9003D4E8C /* SearchItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C4E125B1675BED9003D4E8C /* SearchItem.m */; };
 		2C86184A1657909D00755A47 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C8618491657909D00755A47 /* Cocoa.framework */; };
 		2C8618541657909D00755A47 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2C8618521657909D00755A47 /* InfoPlist.strings */; };
 		2C8618561657909E00755A47 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C8618551657909E00755A47 /* main.m */; };
@@ -56,6 +57,8 @@
 		2C3485861670784B005A6292 /* PLDItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PLDItem.m; path = Model/PLDItem.m; sourceTree = "<group>"; };
 		2C34858816708DE3005A6292 /* LoginResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginResult.h; path = Model/LoginResult.h; sourceTree = "<group>"; };
 		2C34858916708DE3005A6292 /* LoginResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginResult.m; path = Model/LoginResult.m; sourceTree = "<group>"; };
+		2C4E125A1675BED9003D4E8C /* SearchItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SearchItem.h; path = Model/SearchItem.h; sourceTree = "<group>"; };
+		2C4E125B1675BED9003D4E8C /* SearchItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SearchItem.m; path = Model/SearchItem.m; sourceTree = "<group>"; };
 		2C8618451657909D00755A47 /* Jingfm4Mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Jingfm4Mac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C8618491657909D00755A47 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		2C86184C1657909D00755A47 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -102,6 +105,8 @@
 				2C3485861670784B005A6292 /* PLDItem.m */,
 				2C34858816708DE3005A6292 /* LoginResult.h */,
 				2C34858916708DE3005A6292 /* LoginResult.m */,
+				2C4E125A1675BED9003D4E8C /* SearchItem.h */,
+				2C4E125B1675BED9003D4E8C /* SearchItem.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -279,6 +284,7 @@
 				2C34856F166EFA2E005A6292 /* PLSResult.m in Sources */,
 				2C3485871670784C005A6292 /* PLDItem.m in Sources */,
 				2C34858A16708DE4005A6292 /* LoginResult.m in Sources */,
+				2C4E125C1675BED9003D4E8C /* SearchItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

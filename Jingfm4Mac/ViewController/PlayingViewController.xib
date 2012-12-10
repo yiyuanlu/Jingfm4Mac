@@ -127,11 +127,11 @@
 						<object class="NSButtonCell" key="NSCell" id="552553934">
 							<int key="NSCellFlags">67108864</int>
 							<int key="NSCellFlags2">134217728</int>
-							<string key="NSContents"/>
+							<string key="NSContents">Next</string>
 							<reference key="NSSupport" ref="574992485"/>
 							<string key="NSCellIdentifier">_NS:9</string>
 							<reference key="NSControlView" ref="407384942"/>
-							<int key="NSButtonFlags">-2033958912</int>
+							<int key="NSButtonFlags">-2038153216</int>
 							<int key="NSButtonFlags2">134</int>
 							<string key="NSAlternateContents"/>
 							<string key="NSKeyEquivalent"/>
@@ -186,11 +186,11 @@
 						<object class="NSButtonCell" key="NSCell" id="657498274">
 							<int key="NSCellFlags">67108864</int>
 							<int key="NSCellFlags2">134217728</int>
-							<string key="NSContents"/>
+							<string key="NSContents">讨厌</string>
 							<reference key="NSSupport" ref="574992485"/>
 							<string key="NSCellIdentifier">_NS:9</string>
 							<reference key="NSControlView" ref="21136968"/>
-							<int key="NSButtonFlags">-2033958912</int>
+							<int key="NSButtonFlags">-2038153216</int>
 							<int key="NSButtonFlags2">134</int>
 							<string key="NSAlternateContents"/>
 							<string key="NSKeyEquivalent"/>
@@ -211,11 +211,11 @@
 						<object class="NSButtonCell" key="NSCell" id="761144491">
 							<int key="NSCellFlags">67108864</int>
 							<int key="NSCellFlags2">134217728</int>
-							<string key="NSContents"/>
+							<string key="NSContents">喜欢</string>
 							<reference key="NSSupport" ref="574992485"/>
 							<string key="NSCellIdentifier">_NS:9</string>
 							<reference key="NSControlView" ref="111645718"/>
-							<int key="NSButtonFlags">-2033958912</int>
+							<int key="NSButtonFlags">-2038153216</int>
 							<int key="NSButtonFlags2">134</int>
 							<string key="NSAlternateContents"/>
 							<string key="NSKeyEquivalent"/>
@@ -350,6 +350,14 @@
 						<reference key="destination" ref="21136968"/>
 					</object>
 					<int key="connectionID">137</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">delegate</string>
+						<reference key="source" ref="424541731"/>
+						<reference key="destination" ref="1001"/>
+					</object>
+					<int key="connectionID">138</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1111,7 +1119,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">137</int>
+			<int key="maxID">138</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">

@@ -10,6 +10,7 @@
 #import "AudioStreamer.h"
 #import "SongItem.h"
 #import "PLSResult.h"
+#import "SearchItem.h"
 
 @interface PlayingViewController ()
 
@@ -322,19 +323,6 @@
     }
     
 }
-
--(IBAction)actPlayNext:(id)sender
-{
-    [self playingNext];
-}
--(IBAction)actLove:(id)sender
-{
-    [self reportLove];
-}
--(IBAction)actHate:(id)sender
-{
-    [self reportHate];
-}
 -(void)reportPlayingData
 {    
     [[RKClient sharedClient] get:REPORT_PLAYING usingBlock:^(RKRequest *request) {
@@ -491,5 +479,89 @@
             }
         };
     }];
+}
+
+-(void)loadKeyWords:(NSString *)keywords
+{
+    RKObjectMapping* searchMapping = [RKObjectMapping mappingForClass:[SearchItem class]];
+    [searchMapping mapKeyPath:@"id" toAttribute:@"nameId"];
+    [searchMapping mapAttributes:@"fid",@"n",@"t",nil];
+    
+    [[RKObjectManager sharedManager].mappingProvider setMapping:searchMapping forKeyPath:@"result"];
+    
+    [[RKObjectManager sharedManager] loadObjectsAtResourcePath:SEARCH_KEYWORDS usingBlock:^(RKObjectLoader *loader) {
+        
+        //mapping
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:keywords, @"q",@"12", @"ps",@"0", @"st", nil];
+        RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[NSDictionary class]];
+        [mapping mapAttributes:@"q",@"ps",@"st",nil];
+        RKObjectSerializer *serializer = [RKObjectSerializer serializerWithObject:dic mapping:mapping];
+        NSError *error = nil;
+        id<RKRequestSerializable> serialization = [serializer serializationForMIMEType:@"application/x-www-form-urlencoded" error:&error];
+        loader.params = serialization;
+        //other & add Header
+        loader.method = RKRequestMethodPOST;
+        loader.additionalHTTPHeaders = [NSDictionary dictionaryWithKeysAndObjects:@"Jing-A-Token-Header",[GlobalData sharedInstance].JingAToken,@"Referer",@"http://jing.fm/",nil];
+        
+        loader.onDidFailLoadWithError = ^(NSError *error)
+        {
+        NSLog(@"onDidFailLoadWithError error [%@]",error);
+        //[DROP_WINDOW showTips:error.localizedDescription];
+        };
+        
+        loader.onDidLoadResponse = ^(RKResponse *response)
+        {
+        //NSLog(@"%@",response.bodyAsString);
+        if (response.statusCode != 200)
+            {
+            //We got an error!
+            NSLog(@"http status code is not 200[%ld] __[%s]__ url [%@]",response.statusCode,__FUNCTION__,loader.resourcePath);
+            //[DROP_WINDOW showTips:@"对不起，服务器出错！"];
+            }
+        else
+            {
+            NSError *error = nil;
+            NSDictionary *resDic = [response parsedBody:&error];
+            BOOL success = [[resDic objectForKey:@"success"] boolValue];
+            NSString *msg = SAFE_STR([resDic objectForKey:@"msg"]);
+            //Check Response Body to get Data!
+            if(!error&&resDic&&success)
+                {
+                //NSLog(@"resDic [%@]",resDic);
+                
+                
+                }
+            else
+                {
+                NSLog(@"%@",msg);
+                NSLog(@"200 error [%@]",[error description]);
+                //                [DROP_WINDOW showTips:error.localizedDescription];
+                }
+            }
+        };
+        loader.onDidLoadObjects = ^(NSArray *objects){
+            //            NSLog(@"%@ [%@]",[object class],[(PLSResult *)object valueForKey:@"items"]);
+            NSLog(@"objects count [%ld]",[objects count]);
+            
+        };
+    }];
+}
+
+-(void)controlTextDidChange:(NSNotification *)notification
+{
+    [self loadKeyWords:self.txfSearch.stringValue];
+}
+
+-(IBAction)actPlayNext:(id)sender
+{
+    [self playingNext];
+}
+-(IBAction)actLove:(id)sender
+{
+    [self reportLove];
+}
+-(IBAction)actHate:(id)sender
+{
+    [self reportHate];
 }
 @end

@@ -10,7 +10,7 @@
 
 @class AudioStreamer;
 
-@interface PlayingViewController : NSViewController
+@interface PlayingViewController : NSViewController<NSTextFieldDelegate>
 
 @property (nonatomic,strong) IBOutlet NSImageView *diskImage;
 @property (nonatomic,strong) IBOutlet NSButton *btnLike;
