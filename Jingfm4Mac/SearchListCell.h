@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface SearchListCell : NSCell
+@interface SearchListCell : NSTextFieldCell
 @property (nonatomic,strong) NSImage    *icon;
 @property (nonatomic,strong) NSString   *name;
 @end

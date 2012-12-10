@@ -40,6 +40,11 @@
     return self;
 }
 
+- (void)awakeFromNib
+{
+    [self.tableView setHidden:YES];    
+}
+
 - (void)loadMusic:(NSString *)mid fid:(NSString *)fid
 {
     [self loadSong:mid];
@@ -568,6 +573,8 @@
         loader.onDidLoadObjects = ^(NSArray *objects){
             //            NSLog(@"%@ [%@]",[object class],[(PLSResult *)object valueForKey:@"items"]);
             self.arraySearch = objects;
+            [self.tableView setHidden:NO];
+            [self.tableView reloadData];
             NSLog(@"objects count [%ld]",[objects count]);
             
         };
