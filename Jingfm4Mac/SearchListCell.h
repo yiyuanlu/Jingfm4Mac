@@ -1,28 +1,14 @@
 //
-//  UMAppListCell.h
-//  UmengXcodeAssistant
+//  SearchListCell.h
+//  Jingfm4Mac
 //
 //  Created by luyiyuan on 8/20/12.
-//  Copyright (c) 2012 Umeng.com. All rights reserved.
+//  Copyright (c) 2012 tapray.com. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
 
-@interface UMAppListCell : NSCell
-{
-@private
-    NSImage     *_icon;
-    NSString    *_iconUrl;
-    NSString    *_appName;
-    NSString    *_bundleId;
-    NSImage     *_iconLink;
-    NSString    *_url;
-    NSButtonCell *_buttonCell;
-}
-@property (strong) NSImage    *icon;
-@property (strong) NSString   *iconUrl;
-@property (strong) NSString   *appName;
-@property (strong) NSString   *bundleId;
-@property (strong) NSImage    *iconLink;
-@property (strong) NSString   *url;
+@interface SearchListCell : NSCell
+@property (nonatomic,strong) NSImage    *icon;
+@property (nonatomic,strong) NSString   *name;
 @end

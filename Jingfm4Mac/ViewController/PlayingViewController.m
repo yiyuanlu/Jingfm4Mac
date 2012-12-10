@@ -11,6 +11,7 @@
 #import "SongItem.h"
 #import "PLSResult.h"
 #import "SearchItem.h"
+#import "SearchListCell.h"
 
 @interface PlayingViewController ()
 
@@ -25,6 +26,7 @@
     {
         // Initialization code here.
         self.txfSearch.stringValue = [GlobalData sharedInstance].curCmbt;
+        [self.tableView setHidden:YES];
         //load music data
         [self loadMusic:[GlobalData sharedInstance].loginResult.pldItem.mid
                     fid:[GlobalData sharedInstance].loginResult.pldItem.fid];
@@ -565,11 +567,56 @@
         };
         loader.onDidLoadObjects = ^(NSArray *objects){
             //            NSLog(@"%@ [%@]",[object class],[(PLSResult *)object valueForKey:@"items"]);
+            self.arraySearch = objects;
             NSLog(@"objects count [%ld]",[objects count]);
             
         };
     }];
 }
+
+#pragma -
+#pragma mark tableViewDataSource
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
+{
+    //Fixit:change button's color
+//    [self.btnNewApp setTextColor:[NSColor lightGrayColor]];
+    return [self.arraySearch count];
+}
+
+- (id)tableView:(NSTableView *)tableView
+objectValueForTableColumn:(NSTableColumn *)tableColumn
+            row:(NSInteger)row
+{
+    return [self.arraySearch objectAtIndex:row];
+}
+#pragma -
+#pragma mark tableViewDelegate
+
+- (void)tableView:(NSTableView *)tableView
+  willDisplayCell:(id)cell
+   forTableColumn:(NSTableColumn *)tableColumn
+              row:(NSInteger)row
+{
+    SearchItem *item = [self.arraySearch objectAtIndex:row];
+    
+    SearchListCell *cCell = (SearchListCell *)cell;
+    cCell.name = item.n;
+
+}
+
+- (BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
+{
+    //    UMXcodeProject *info = [_arrayModel objectAtIndex:row];
+    //    _xCodeUrl = info.path;
+    //    NSLog(@"%@",_xCodeUrl);
+    return YES;
+}
+
+-(void)tableViewSelectionDidChange:(NSNotification *)notification
+{
+    NSLog(@"%ld",[((NSTableView *)[notification object]) selectedRow]);
+}
+
 
 -(void)controlTextDidChange:(NSNotification *)notification
 {
