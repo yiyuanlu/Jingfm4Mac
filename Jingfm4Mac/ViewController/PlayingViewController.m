@@ -25,15 +25,16 @@
     if (self)
     {
         // Initialization code here.
-        self.txfSearch.stringValue = [GlobalData sharedInstance].curCmbt;
-        [self.tableView setHidden:YES];
+        self.arrayKeyWords = [[NSMutableArray alloc] init];
+        self.curKeyword = @"";
+        self.allKeywords = @"";
         //load music data
         [self loadMusic:[GlobalData sharedInstance].loginResult.pldItem.mid
                     fid:[GlobalData sharedInstance].loginResult.pldItem.fid];
     
         //load pls
         [self loadPls:[GlobalData sharedInstance].loginResult.pldItem.cmbt
-                   st:[NSNumber numberWithInt:0]
+                   st:0
               playNow:NO];
     }
     
@@ -42,7 +43,8 @@
 
 - (void)awakeFromNib
 {
-    [self.tableView setHidden:YES];    
+    self.txfSearch.stringValue = [GlobalData sharedInstance].curCmbt;
+    [self.tableView setHidden:YES];
 }
 
 - (void)loadMusic:(NSString *)mid fid:(NSString *)fid
@@ -106,7 +108,7 @@
     }];
 }
 
--(void)loadPls:(NSString *)cmbt st:(NSNumber *)st playNow:(BOOL)playNow
+-(void)loadPls:(NSString *)cmbt st:(int)st playNow:(BOOL)playNow
 {
     NSLog(@"loadPls ====");
     //fetch pls
@@ -123,7 +125,7 @@
     [[RKObjectManager sharedManager] loadObjectsAtResourcePath:FETCH_PLS usingBlock:^(RKObjectLoader *loader) {
 
         //mapping
-        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:cmbt, @"q", @"5", @"ps",st, @"st",[GlobalData sharedInstance].loginResult.pldItem.uid, @"u", nil, @"mt",nil];
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:cmbt, @"q", @"5", @"ps",[NSNumber numberWithInt:st], @"st",[GlobalData sharedInstance].loginResult.pldItem.uid, @"u", nil, @"mt",nil];
         RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[NSDictionary class]];
         [mapping mapAttributes:@"q",@"ps",@"st",@"u",@"mt", nil];
         RKObjectSerializer *serializer = [RKObjectSerializer serializerWithObject:dic mapping:mapping];
@@ -290,7 +292,7 @@
     //check cmbt
     if(![[GlobalData sharedInstance].curCmbt isEqualToString:self.txfSearch.stringValue])
     {
-        [self loadPls:self.txfSearch.stringValue st:[NSNumber numberWithInt:0] playNow:YES];
+        [self loadPls:self.txfSearch.stringValue st:0 playNow:YES];
         return;
     }
 
@@ -326,20 +328,20 @@
                 if(st == 0)
                 {
                     [self loadPls:[GlobalData sharedInstance].loginResult.pldItem.cmbt
-                               st:[NSNumber numberWithInt:arrCount+1]
+                               st:arrCount+1
                           playNow:NO];
                 }
                 else
                 {
                     [self loadPls:[GlobalData sharedInstance].loginResult.pldItem.cmbt
-                               st:[NSNumber numberWithInt:st+arrCount]
+                               st:st+arrCount
                           playNow:NO];
                 }
             }
             else
             {
                 [self loadPls:[GlobalData sharedInstance].loginResult.pldItem.cmbt
-                           st:[NSNumber numberWithInt:0]
+                           st:0
                       playNow:NO];
             }
             
@@ -619,15 +621,46 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     return YES;
 }
 
+
 -(void)tableViewSelectionDidChange:(NSNotification *)notification
 {
-    NSLog(@"%ld",[((NSTableView *)[notification object]) selectedRow]);
+    NSInteger selectedRow = [((NSTableView *)[notification object]) selectedRow];
+    NSLog(@"tableViewSelectionDidChange[%ld] name [%@]",selectedRow,[notification name]);
+    
+    if(selectedRow>=0)
+    {
+        SearchItem *item = [self.arraySearch objectAtIndex:selectedRow];
+        [self.arrayKeyWords addObject:item.n];
+        
+        self.txfSearch.stringValue = [self.allKeywords length]>0?([NSString stringWithFormat:@"%@+%@",self.allKeywords,item.n]):(item.n);
+    
+        self.arraySearch = [[NSArray alloc] init];
+        [self.tableView reloadData];
+        [self.txfSearch resignFirstResponder];
+    }
+    
+
+}
+-(BOOL)control:(NSControl *)control textShouldBeginEditing:(NSText *)fieldEditor
+{
+    NSLog(@"%s",__FUNCTION__);
+    return YES;
+}
+-(void)textDidBeginEditing:(NSNotification *)notification
+{
+    NSLog(@"textDidBeginEditing");
 }
 
-
--(void)controlTextDidChange:(NSNotification *)notification
+-(void)controlTextDidBeginEditing:(NSNotification *)obj;
 {
-    [self loadKeyWords:self.txfSearch.stringValue];
+    NSLog(@"controlTextDidBeginEditing");
+    self.txfSearch.stringValue = [NSString stringWithFormat:@"%@+",self.txfSearch.stringValue];
+}
+
+-(void)controlTextDidChange:(NSNotification *)obj
+{
+    self.curKeyword = [self.txfSearch.stringValue substringFromIndex:[self.allKeywords length]];
+    [self loadKeyWords:self.curKeyword];
 }
 
 -(IBAction)actPlayNext:(id)sender

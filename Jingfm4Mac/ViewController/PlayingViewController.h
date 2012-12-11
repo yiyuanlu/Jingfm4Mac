@@ -10,7 +10,7 @@
 
 @class AudioStreamer;
 
-@interface PlayingViewController : NSViewController<NSTableViewDataSource,NSTableViewDelegate>
+@interface PlayingViewController : NSViewController<NSTextFieldDelegate,NSTableViewDataSource,NSTableViewDelegate>
 
 @property (nonatomic,strong) IBOutlet NSTableView *tableView;
 @property (nonatomic,strong) IBOutlet NSImageView *diskImage;
@@ -24,6 +24,11 @@
 @property (nonatomic,strong) NSTimer *updateTimer;
 @property (nonatomic,strong) NSDate *dataForReport;
 @property (nonatomic,strong) NSArray *arraySearch;
+//about keywords
+@property (nonatomic,strong) NSMutableArray *arrayKeyWords;
+@property (nonatomic,strong) NSString *curKeyword;
+@property (nonatomic,strong) NSString *allKeywords;
+
 
 
 -(IBAction)actPlayNext:(id)sender;
