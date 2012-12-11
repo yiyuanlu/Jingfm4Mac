@@ -12,6 +12,7 @@
 #import "PLSResult.h"
 #import "SearchItem.h"
 #import "SearchListCell.h"
+#import "JFTextField.h"
 
 @interface PlayingViewController ()
 
@@ -25,9 +26,9 @@
     if (self)
     {
         // Initialization code here.
-        self.arrayKeyWords = [[NSMutableArray alloc] init];
-        self.curKeyword = @"";
-        self.allKeywords = @"";
+//        self.arrayKeyWords = [[NSMutableArray alloc] init];
+//        self.curKeyword = @"";
+//        self.allKeywords = @"";
         //load music data
         [self loadMusic:[GlobalData sharedInstance].loginResult.pldItem.mid
                     fid:[GlobalData sharedInstance].loginResult.pldItem.fid];
@@ -625,42 +626,24 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 -(void)tableViewSelectionDidChange:(NSNotification *)notification
 {
     NSInteger selectedRow = [((NSTableView *)[notification object]) selectedRow];
-    NSLog(@"tableViewSelectionDidChange[%ld] name [%@]",selectedRow,[notification name]);
-    
+
     if(selectedRow>=0)
     {
         SearchItem *item = [self.arraySearch objectAtIndex:selectedRow];
-        [self.arrayKeyWords addObject:item.n];
-        
-        self.txfSearch.stringValue = [self.allKeywords length]>0?([NSString stringWithFormat:@"%@+%@",self.allKeywords,item.n]):(item.n);
+
+        [self.txfSearch repcurKeyword:item.n];
     
         self.arraySearch = [[NSArray alloc] init];
         [self.tableView reloadData];
-        [self.txfSearch resignFirstResponder];
+        [self.txfSearch becomeFirstResponder];
     }
     
 
 }
--(BOOL)control:(NSControl *)control textShouldBeginEditing:(NSText *)fieldEditor
-{
-    NSLog(@"%s",__FUNCTION__);
-    return YES;
-}
--(void)textDidBeginEditing:(NSNotification *)notification
-{
-    NSLog(@"textDidBeginEditing");
-}
-
--(void)controlTextDidBeginEditing:(NSNotification *)obj;
-{
-    NSLog(@"controlTextDidBeginEditing");
-    self.txfSearch.stringValue = [NSString stringWithFormat:@"%@+",self.txfSearch.stringValue];
-}
 
 -(void)controlTextDidChange:(NSNotification *)obj
 {
-    self.curKeyword = [self.txfSearch.stringValue substringFromIndex:[self.allKeywords length]];
-    [self loadKeyWords:self.curKeyword];
+    [self loadKeyWords:self.txfSearch.curKeyword];
 }
 
 -(IBAction)actPlayNext:(id)sender
