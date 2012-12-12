@@ -18,7 +18,6 @@
     //
     self.curViewState = EView_Init;
     [GlobalData sharedInstance];
-    
 }
 
 - (void)awakeFromNib
